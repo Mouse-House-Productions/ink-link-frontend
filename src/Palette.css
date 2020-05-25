@@ -1,0 +1,15 @@
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    justify-items: center;
+    align-items: center;
+    height: 100%;
+    width: 33vh;
+}
+
+.grid-button {
+    border-radius: 35%;
+    width: 10vh;
+    height: 10vh;
+    border: 0.5vh solid black;
+}

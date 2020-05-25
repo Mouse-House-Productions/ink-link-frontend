@@ -1,0 +1,54 @@
+.slider-container {
+    position: absolute;
+    display: block;
+    height: 100vh;
+    /*noinspection CssInvalidPropertyValue*/
+    height: -webkit-fill-available;
+    opacity: 0;
+    background: white;
+    box-shadow: 3px 3px 5px 6px #ccc;
+}
+
+.slider-container > * {
+    padding-left: 1vh;
+    padding-right: 1vh;
+}
+
+.cancel {
+    opacity: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 5000;
+}
+
+.cancel.active {
+    display: block;
+    position:absolute;
+    top: 0;
+    left: 0;
+}
+
+.cancel.hidden {
+    display:none;
+}
+
+.slide-in {
+    animation: slide-in 0.75s forwards;
+    -webkit-animation: slide-in 0.75s forwards;
+}
+
+@keyframes slide-in {
+    0% {
+        z-index: 10000;
+    }
+    100% {
+        opacity: 1;
+        z-index: 10000;
+    }
+}
+
+@-webkit-keyframes slide-in {
+    100% {
+        -webkit-transform: translateX(0);
+    }
+}

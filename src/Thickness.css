@@ -1,0 +1,12 @@
+.column {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.column > *:not(:first-child) {
+    margin-top: calc(10vh/3)
+}
