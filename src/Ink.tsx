@@ -1,4 +1,4 @@
-import React, {CSSProperties, MutableRefObject, useRef} from "react";
+import React, {CSSProperties} from "react";
 import "./Ink.css"
 import CanvasDraw, {CanvasDrawProps} from "react-canvas-draw";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -21,12 +21,12 @@ interface InkProps {
     draw: ((img: string) => void)
 }
 
+
 const DEFAULT_BRUSH_RADIUS = 5;
 const DEFAULT_LAZY_RADIUS = 1;
 const DEFAULT_CANVAS_HEIGHT = "70vh";
 const DEFAULT_CANVAS_WIDTH = "95vw";
 const DEFAULT_BRUSH_COLOR = hsl(0, 0, 0);
-const WHITE = "hsl(0, 0%, 100%)";
 
 class Ink extends React.Component<InkProps, InkState> {
 
@@ -70,14 +70,30 @@ class Ink extends React.Component<InkProps, InkState> {
     }
 
     setImage(c : CanvasDraw) : void {
+        let img = "";
+        try {
+            //Annoyingly there's not a good way to get ahold of the picture using the interface.
+            //There are 4 canvases for a CanvasDraw and the 1th one has our drawing in it.
+            //When a PR is resolved on the upstream lib we can replace this with a nicer call.
+            img = document.querySelectorAll("canvas")[1].toDataURL();
+        } catch (ex) {
+            //ignored
+        }
         this.setState({
             undo: () => c.undo(),
+            img
         });
     }
 
     undo() : void {
         if (this.state.undo) {
             this.state.undo();
+        }
+    }
+
+    draw() : void {
+        if (this.state.img && this.state.img.length > 0) {
+            this.props.draw(this.state.img);
         }
     }
 
@@ -130,7 +146,7 @@ class Ink extends React.Component<InkProps, InkState> {
                         <div className={"canvasControl"} onClick={() => this.undo()}>
                             <FontAwesomeIcon icon={faUndo}/>
                         </div>
-                        <div className={"canvasControl"}>
+                        <div className={"canvasControl"} onClick={() => this.draw()}>
                             <FontAwesomeIcon icon={faPaperPlane}/>
                         </div>
                     </div>

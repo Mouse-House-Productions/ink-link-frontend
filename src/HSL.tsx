@@ -1,4 +1,3 @@
-import {CSSProperties} from "react";
 import {BackgroundProperty} from "csstype"
 
 export interface HSL {

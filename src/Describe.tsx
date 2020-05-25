@@ -39,7 +39,7 @@ class Describe extends React.Component<DescribeProps, DescribeState> {
         const placeholder = (this.props.img) ? "Say what you see!" : "Write a prompt to get us started!";
         return (<div className={"fullScreen"}>
             <div className={"describe"}>
-                <img className={"captionTarget"} src={this.props.img}/>
+                <img className={"captionTarget"} src={this.props.img} alt={this.props.img ? "Sketch" : ""}/>
                 <div className={"captionInput"}>
                     <input type={"text"} placeholder={placeholder} onChange={e => this.setDescription(e)} onKeyDown={this.handleKeyDown}/>
                     <div className={"captionControl"} onClick={() => this.describe()}>

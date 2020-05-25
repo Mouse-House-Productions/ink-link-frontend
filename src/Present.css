@@ -1,0 +1,43 @@
+.present {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.book {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    justify-content: flex-end;
+    height: 90vh;
+    overflow-y: scroll;
+    width: 100vw;
+}
+
+.presentImage {
+    max-width: 95vw;
+    border: 2px solid brown;
+}
+
+.presentControls {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.presentControl:not(:first-child) {
+    margin-left: 1rem;
+}
+
+.presentControl {
+    width: 2rem;
+    height: 2rem;
+    border: 1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 40%;
+    box-shadow: 3px 3px 0 0 #ccc;
+}

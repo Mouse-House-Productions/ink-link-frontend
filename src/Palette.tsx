@@ -59,7 +59,7 @@ class Palette extends React.Component<IPaletteProps> {
             const style : CSSProperties = {
                 background: css(c)
             }
-            return (<div className="grid-button" style={style} onClick={() => this.select(c)}></div>)
+            return (<div key={css(c)} className="grid-button" style={style} onClick={() => this.select(c)}></div>)
         })
         return <Slider active={true} cancel={() => this.cancel()}>
             <div className="grid">{buttons}</div>
