@@ -41,7 +41,7 @@ class Thickness extends React.Component<ThicknessProps> {
             }
             return (<div className={"grid-button"} onClick={() => this.select(c)}><div style={style}/></div>)
         })
-        return <Slider active={true} cancel={() => this.cancel()}>
+        return <Slider active={true} cancel={() => this.cancel()} speed={"fast"}>
             <div className="column">
                 {buttons}
             </div>

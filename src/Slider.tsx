@@ -4,6 +4,7 @@ import './Slider.css'
 export interface SliderProps {
     active?: boolean;
     cancel?: (() => void) | null;
+    speed?: "slow" | "med" | "fast" | null;
 }
 
 class Slider extends React.Component<SliderProps> {
@@ -14,19 +15,14 @@ class Slider extends React.Component<SliderProps> {
         }
     }
     render() {
-        let cancelStyle : CSSProperties = {
-            position: "absolute",
-            width: "100vw",
-            height: "100vh",
-            top: 0,
-            left: 0,
-            zIndex: -1
-        };
-
+        let className = "slider-container slide-in";
+        if (this.props.speed != null) {
+            className += " " + this.props.speed;
+        }
         return (
-            <div className={"slider-container slide-in"}>
+            <div className={className}>
                 {this.props.children}
-                <div style={cancelStyle} onClick={() => this.cancel()}/>
+                <div className={"cancel"} onClick={() => this.cancel()}/>
             </div>)
     }
 }

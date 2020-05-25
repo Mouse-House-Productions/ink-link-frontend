@@ -1,40 +1,32 @@
 import React, {CSSProperties, MouseEventHandler} from 'react';
 import './App.css';
 import CanvasDraw, {CanvasDrawProps} from 'react-canvas-draw';
-import Button from 'react-bootstrap/Button';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Palette from "./Palette";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCircle} from "@fortawesome/free-solid-svg-icons";
 import {faPaintBrush} from "@fortawesome/free-solid-svg-icons";
+import {faPaperPlane} from "@fortawesome/free-solid-svg-icons";
+import {faUndo} from "@fortawesome/free-solid-svg-icons";
 import Thickness from "./Thickness";
+import {cssString, hsl, HSL} from "./HSL";
 
 interface IAppProps {
 }
 
 interface IAppState {
-    canvasProps : CanvasDrawProps
-    paletteActive : boolean
-    thicknessActive : boolean
+    canvasProps : CanvasDrawProps;
+    brushColor : HSL;
+    undo?: (() => void) | null;
+    paletteActive : boolean;
+    thicknessActive : boolean;
 }
 
 
 const DEFAULT_BRUSH_RADIUS = 5;
-const MIN_BRUSH_RADIUS = 1;
-const MAX_BRUSH_RADIUS = 10;
-const LAZY_RADIUS_STEP = 1;
 const DEFAULT_LAZY_RADIUS = 1;
-const MIN_LAZY_RADIUS = 1;
-const MAX_LAZY_RADIUS = 100;
-const CANVAS_HEIGHT_STEP = 50;
-const DEFAULT_CANVAS_HEIGHT = 400;
-const MIN_CANVAS_HEIGHT = 400;
-const MAX_CANVAS_HEIGHT = 1000;
-const DEFAULT_CANVAS_WIDTH = 350;
-const MIN_CANVAS_WIDTH = 400;
-const MAX_CANVAS_WIDTH = 1000;
-const CANVAS_WIDTH_STEP = 50;
-const DEFAULT_BRUSH_COLOR = "hsl(0, 0%, 0%)";
+const DEFAULT_CANVAS_HEIGHT = "70vh";
+const DEFAULT_CANVAS_WIDTH = "95vw";
+const DEFAULT_BRUSH_COLOR = hsl(0, 0, 0);
 const WHITE = "hsl(0, 0%, 100%)";
 
 
@@ -43,140 +35,27 @@ class App extends React.Component<IAppProps, IAppState> {
     constructor(props: IAppProps) {
         super(props);
         this.state = {
+            brushColor: DEFAULT_BRUSH_COLOR,
             canvasProps: {
                 hideGrid: true,
                 brushRadius: DEFAULT_BRUSH_RADIUS,
-                brushColor: DEFAULT_BRUSH_COLOR,
                 lazyRadius: DEFAULT_LAZY_RADIUS,
                 hideInterface: true,
                 canvasHeight: DEFAULT_CANVAS_HEIGHT,
                 canvasWidth: DEFAULT_CANVAS_WIDTH,
                 style: {
-                    border: "1px solid black"
-                },
+                    border: "2px solid brown"
+                }
             },
             paletteActive: false,
             thicknessActive: false
         }
     }
 
-    decreaseBrush : MouseEventHandler = () => {
-        this.setState((state) => {
-            const brushRadius = Math.max(MIN_BRUSH_RADIUS, (state.canvasProps.brushRadius || DEFAULT_BRUSH_RADIUS) - 1);
-            return {
-                canvasProps: {
-                    ...state.canvasProps,
-                    brushRadius
-                }
-            }
-        });
-    }
-
-    increaseBrush : MouseEventHandler = () => {
-        this.setState((state) => {
-            const brushRadius = Math.min(MAX_BRUSH_RADIUS, (state.canvasProps.brushRadius || DEFAULT_BRUSH_RADIUS) + 1);
-            return {
-                canvasProps: {
-                    ...state.canvasProps,
-                    brushRadius
-                }
-            }
-        })
-    };
-
-    increaseLazyRadius : MouseEventHandler = () => {
-        this.setState((state) => {
-            const lazyRadius = Math.min(MAX_LAZY_RADIUS, (state.canvasProps.lazyRadius || DEFAULT_LAZY_RADIUS) + LAZY_RADIUS_STEP);
-            return {
-                canvasProps : {
-                    ...state.canvasProps,
-                    lazyRadius
-                }
-            }
-        })
-    }
-
-    decreaseLazyRadius : MouseEventHandler = () => {
-        this.setState((state) => {
-            const lazyRadius = Math.max(MIN_LAZY_RADIUS, Math.min(MIN_LAZY_RADIUS, (state.canvasProps.lazyRadius || DEFAULT_LAZY_RADIUS) - LAZY_RADIUS_STEP));
-            return {
-                canvasProps : {
-                    ...state.canvasProps,
-                    lazyRadius
-                }
-            }
-        })
-    }
-
-    decreaseCanvasHeight : MouseEventHandler = () => {
-        this.setState((state) => {
-            let canvasHeight = DEFAULT_CANVAS_HEIGHT;
-            if (typeof state.canvasProps.canvasHeight === "number") {
-                canvasHeight = Math.max(MIN_CANVAS_HEIGHT, (state.canvasProps.canvasHeight || DEFAULT_CANVAS_HEIGHT) - CANVAS_HEIGHT_STEP);
-            }
-            return {
-                canvasProps : {
-                    ...state.canvasProps,
-                    canvasHeight
-                }
-            }
-        });
-    }
-
-    increaseCanvasHeight : MouseEventHandler = () => {
-        this.setState((state) => {
-            let canvasHeight = DEFAULT_CANVAS_HEIGHT;
-            if (typeof state.canvasProps.canvasHeight === "number") {
-                canvasHeight = Math.min(MAX_CANVAS_HEIGHT, (state.canvasProps.canvasHeight || DEFAULT_CANVAS_HEIGHT) + CANVAS_HEIGHT_STEP);
-            }
-            return {
-                canvasProps : {
-                    ...state.canvasProps,
-                    canvasHeight
-                }
-            }
-        });
-    }
-
-    decreaseCanvasWidth : MouseEventHandler = () => {
-        this.setState((state) => {
-            let canvasWidth = DEFAULT_CANVAS_WIDTH;
-            if (typeof state.canvasProps.canvasWidth === "number") {
-                canvasWidth = Math.max(MIN_CANVAS_WIDTH, (state.canvasProps.canvasWidth || DEFAULT_CANVAS_WIDTH) - CANVAS_WIDTH_STEP);
-            }
-            return {
-                canvasProps : {
-                    ...state.canvasProps,
-                    canvasWidth
-                }
-            }
-        });
-    }
-
-    increaseCanvasWidth : MouseEventHandler = () => {
-        this.setState((state) => {
-            let canvasWidth = DEFAULT_CANVAS_WIDTH;
-            if (typeof state.canvasProps.canvasWidth === "number") {
-                canvasWidth = Math.min(MAX_CANVAS_WIDTH, (state.canvasProps.canvasWidth || DEFAULT_CANVAS_WIDTH) + CANVAS_WIDTH_STEP);
-            }
-            return {
-                canvasProps : {
-                    ...state.canvasProps,
-                    canvasWidth
-                }
-            }
-        });
-    }
-
-    setBrushColor(color : string) {
-        this.setState((state) => {
-            return {
-                canvasProps: {
-                    ...state.canvasProps,
-                    brushColor: color
-                },
-                paletteActive: false
-            }
+    setBrushColor(color : HSL) {
+        this.setState({
+            brushColor: color,
+            paletteActive: false
         });
     }
 
@@ -192,10 +71,25 @@ class App extends React.Component<IAppProps, IAppState> {
         })
     }
 
+    setUndo(c : CanvasDraw) : void {
+        this.setState({
+            undo: () => c.undo()
+        });
+    }
+
+    undo() : void {
+        if (this.state.undo) {
+            this.state.undo();
+        }
+    }
+
 public render() {
+    let brushHsl = this.state.brushColor;
     const canvasProps = {
         ...this.state.canvasProps,
-        disabled: (this.state.canvasProps.disabled) || this.state.paletteActive || this.state.thicknessActive
+        disabled: (this.state.canvasProps.disabled) || this.state.paletteActive || this.state.thicknessActive,
+        brushColor: cssString(brushHsl),
+        onChange: (c : CanvasDraw) => this.setUndo(c)
     };
 
     const brushRadius = canvasProps.brushRadius || DEFAULT_BRUSH_RADIUS;
@@ -208,6 +102,11 @@ public render() {
         height: (2*brushRadius)+"px",
     }
 
+    const paletteStyle : CSSProperties = {
+        backgroundColor: cssString(brushHsl)
+    }
+    const inverseLight = cssString(hsl(0, 0, (brushHsl.light <= 50) ? 100 : 0));
+
     let dialog : JSX.Element = (<div className={"hidden"}/>)
     let palette = (<Palette select={(c) => this.setBrushColor(c)} cancel={() => this.setState({paletteActive: false})}/>);
     let thickness = (<Thickness select={(c) => this.setBrushRadius(c)} cancel={() => this.setState({thicknessActive: false})}/>);
@@ -219,14 +118,26 @@ public render() {
 
 
     return (
-        <div className="App">
-            <CanvasDraw {...canvasProps}/>
+        <div className={"fullScreen"}>
             {dialog}
-            <div className={"canvas-control"}>
-                <FontAwesomeIcon size={"2x"} color={canvasProps.brushColor} icon={faPaintBrush} onClick={() => this.setState({paletteActive: true})}/>
+            <div className={"App"}>
+            <div>This is your prompt</div>
+            <CanvasDraw {...canvasProps}/>
+
+            <div className={"canvasControls"}>
+                <div className={"canvasControl"} style={paletteStyle} onClick={() => this.setState({paletteActive: true})}>
+                    <FontAwesomeIcon size={"1x"} color={inverseLight} icon={faPaintBrush}/>
+                </div>
+                <div className={"canvasControl"} onClick={() => this.setState({thicknessActive: true})}>
+                    <div style={thicknessStyle}/>
+                </div>
+                <div className={"canvasControl"} onClick={() => this.undo()}>
+                    <FontAwesomeIcon icon={faUndo}/>
+                </div>
+                <div className={"canvasControl"}>
+                    <FontAwesomeIcon icon={faPaperPlane}/>
+                </div>
             </div>
-            <div className={"canvas-control"} onClick={() => this.setState({thicknessActive: true})}>
-                <div style={thicknessStyle}/>
             </div>
         </div>
     )

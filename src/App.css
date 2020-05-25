@@ -2,9 +2,27 @@
     touch-action: manipulation;
     display: flex;
     flex-direction: column;
+    height: 100vh;
+    /*noinspection CssInvalidPropertyValue*/
+    height: -webkit-available-height;
+    align-items: center;
 }
 
-.canvas-control {
+.fullScreen {
+    height: 100vh;
+    /*noinspection CssInvalidPropertyValue*/
+    height: -webkit-available-height;
+    width: 100vw;
+}
+
+.canvasContainer {
+    border: 1px dashed red;
+    width: 95vw;
+    touch-action: manipulation;
+}
+
+.canvasControl {
+    touch-action: manipulation;
     border: 0.125rem solid black;
     border-radius: 50%;
     width: 3rem;
@@ -12,6 +30,18 @@
     align-items: center;
     justify-content: center;
     display: flex;
+}
+
+.canvasControl:not(:first-child) {
+    margin-left: 1rem;
+}
+
+.canvasControls {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
 }
 
 .hidden {

@@ -4,9 +4,10 @@
     height: 100vh;
     /*noinspection CssInvalidPropertyValue*/
     height: -webkit-fill-available;
-    opacity: 0;
+    transform: translateX(-100%);
     background: white;
     box-shadow: 3px 3px 5px 6px #ccc;
+    z-index: 10000;
 }
 
 .slider-container > * {
@@ -15,35 +16,32 @@
 }
 
 .cancel {
-    opacity: 0;
+    position: absolute;
     width: 100vw;
     height: 100vh;
-    z-index: 5000;
-}
-
-.cancel.active {
-    display: block;
-    position:absolute;
+    z-index: -1;
     top: 0;
     left: 0;
 }
 
-.cancel.hidden {
-    display:none;
+.slide-in {
+    animation: slide-in 0.5s forwards;
+    -webkit-animation: slide-in 0.5s forwards;
 }
 
-.slide-in {
+.slide-in.fast {
+    animation: slide-in 0.25s forwards;
+    -webkit-animation: slide-in 0.25s forwards;
+}
+
+.slide-in.slow {
     animation: slide-in 0.75s forwards;
     -webkit-animation: slide-in 0.75s forwards;
 }
 
 @keyframes slide-in {
-    0% {
-        z-index: 10000;
-    }
     100% {
-        opacity: 1;
-        z-index: 10000;
+        transform: translateX(0);
     }
 }
 
