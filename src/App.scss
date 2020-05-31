@@ -1,0 +1,166 @@
+@import 'colors';
+
+.hidden {
+    display: none;
+}
+
+body {
+}
+
+//noinspection CssOverwrittenProperties
+.fullScreen {
+    height: 100vh; /* Fallback for browsers that do not support custom properties */
+    height: calc(var(--vh, 1vh) * 100);
+    width: 100vw;
+    touch-action: manipulation;
+    background: $background;
+    color: $foreground;
+    font-family: 'Caveat Brush', cursive;
+}
+
+.title {
+    color: $foreground;
+    text-transform: capitalize;
+    font-size: 30pt;
+    white-space: nowrap;
+    overflow-x: auto;
+    max-width: 100%;
+    display: block;
+}
+
+.title.large {
+    font-size: 50pt;
+}
+
+.rainbow.large {
+    -webkit-text-stroke: 3px black;
+}
+
+//noinspection CssInvalidPropertyValue
+.rainbow {
+    background: linear-gradient(to right, $palRed, $palOrange, $palLightYellow, $palGreen, $palBlue, $palPurple, $palPink);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: 1px black;
+}
+
+.fullScreen > * {
+    max-height: inherit;
+    height: inherit;
+    width: 100%;
+}
+
+.iconControl:active {
+    background: $accent;
+    > * {
+        color: $background
+    }
+}
+
+.iconControl.danger:active {
+    background: $danger;
+    > * {
+        color: $accentLight;
+    }
+}
+
+.iconControl.success:active {
+    background: $success;
+    > * {
+        color: $accentLight;
+    }
+}
+
+.iconControl {
+    width: 2rem;
+    height: 2rem;
+    border: 2px solid $accent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 40%;
+    box-shadow: $shadow;
+    cursor: pointer;
+    background: #ffffff;
+    touch-action: manipulation;
+}
+
+.iconControl > * {
+    color: $accent;
+}
+
+.iconControl > .light {
+    color: $accentLight;
+}
+
+.iconControl.lg {
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
+.iconControl.x-lg {
+    width: 3.5rem;
+    height: 3.5rem;
+}
+
+.iconControl.danger {
+    border-color: $danger;
+    > * {
+        color: $danger;
+    }
+}
+
+.iconControl.success {
+    border-color: $success;
+    > * {
+        color: $success;
+    }
+}
+
+.textControl {
+    display: flex;
+    flex-direction: column;
+    width: 3rem;
+    height: 3rem;
+    padding: 2rem;
+    justify-content: center;
+    align-items: center;
+    border-radius: 30%;
+    border: 1px solid $accent;
+    box-shadow: $shadow;
+    cursor: pointer;
+}
+
+.controlBar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+}
+
+.controlBar.centered {
+    justify-content: center;
+}
+
+.controlBar > :not(:first-child) {
+    margin-left: 1rem;
+}
+
+.spacer {
+    flex-grow: 1;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.row.center {
+    justify-content: center;
+}
+
+.row-reverse {
+    flex-direction: row-reverse;
+}

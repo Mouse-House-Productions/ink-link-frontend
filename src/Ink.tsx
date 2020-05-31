@@ -1,5 +1,5 @@
 import React, {CSSProperties} from "react";
-import "./Ink.css"
+import "./Ink.scss"
 import CanvasDraw, {CanvasDrawProps} from "react-canvas-draw";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPaintBrush, faPaperPlane, faUndo} from "@fortawesome/free-solid-svg-icons";
@@ -11,9 +11,10 @@ interface InkState {
     canvasProps : CanvasDrawProps;
     brushColor : HSL;
     undo?: (() => void) | null;
-    paletteActive : boolean;
-    thicknessActive : boolean;
+    paletteActive: "closed" | "opened" | "hidden";
+    thicknessActive: "closed" | "opened" | "hidden";
     img?: string;
+    undoEnabled?: boolean;
 }
 
 interface InkProps {
@@ -42,18 +43,18 @@ class Ink extends React.Component<InkProps, InkState> {
                 canvasHeight: DEFAULT_CANVAS_HEIGHT,
                 canvasWidth: DEFAULT_CANVAS_WIDTH,
                 style: {
-                    border: "2px solid brown"
+                    border: "2px solid #0d3b66"
                 }
             },
-            paletteActive: false,
-            thicknessActive: false
+            paletteActive: "hidden",
+            thicknessActive: "hidden"
         }
     }
 
     setBrushColor(color : HSL) {
         this.setState({
             brushColor: color,
-            paletteActive: false
+            paletteActive: "closed"
         });
     }
 
@@ -64,7 +65,7 @@ class Ink extends React.Component<InkProps, InkState> {
                     ...state.canvasProps,
                     brushRadius: radius
                 },
-                thicknessActive: false
+                thicknessActive: "closed"
             }
         })
     }
@@ -101,52 +102,36 @@ class Ink extends React.Component<InkProps, InkState> {
         let brushHsl = this.state.brushColor;
         const canvasProps = {
             ...this.state.canvasProps,
-            disabled: (this.state.canvasProps.disabled) || this.state.paletteActive || this.state.thicknessActive,
+            disabled: (this.state.canvasProps.disabled) || (this.state.paletteActive === "opened") || (this.state.thicknessActive === "opened"),
             brushColor: cssString(brushHsl),
             onChange: (c : CanvasDraw) => this.setImage(c)
         };
 
         const brushRadius = canvasProps.brushRadius || DEFAULT_BRUSH_RADIUS;
 
-        const thicknessStyle : CSSProperties = {
-            borderRadius: "50%",
-            border: "none",
-            background: "black",
-            width: (2*brushRadius)+"px",
-            height: (2*brushRadius)+"px",
-        }
-
         const paletteStyle : CSSProperties = {
             backgroundColor: cssString(brushHsl)
         }
-        const inverseLight = cssString(hsl(0, 0, (brushHsl.light <= 50) ? 100 : 0));
-
-        let dialog : JSX.Element = (<div className={"hidden"}/>)
-        let palette = (<Palette select={(c) => this.setBrushColor(c)} cancel={() => this.setState({paletteActive: false})}/>);
-        let thickness = (<Thickness select={(c) => this.setBrushRadius(c)} cancel={() => this.setState({thicknessActive: false})}/>);
-        if (this.state.paletteActive) {
-            dialog = palette;
-        } else if (this.state.thicknessActive) {
-            dialog = thickness;
-        }
+        const brushClass = brushHsl.light <= 50 ? "light" : "dark";
         // @ts-ignore
         return (
-            <div className={"fullScreen"}>
-                {dialog}
+            <div>
+                <Palette active={this.state.paletteActive} select={(c) => this.setBrushColor(c)} cancel={() => this.setState({paletteActive: "closed"})}/>
+                <Thickness active={this.state.thicknessActive} select={(c) => this.setBrushRadius(c)} cancel={() => this.setState({thicknessActive: "closed"})}/>
                 <div className={"Ink"}>
-                    <div>{this.props.prompt ? this.props.prompt : ""}</div>
+                    <div className={"title"}>{this.props.prompt ? this.props.prompt : ""}</div>
                     <CanvasDraw {...canvasProps}/>
-                    <div className={"canvasControls"}>
-                        <div className={"canvasControl"} style={paletteStyle} onClick={() => this.setState({paletteActive: true})}>
-                            <FontAwesomeIcon size={"1x"} color={inverseLight} icon={faPaintBrush}/>
+                    <div className={"controlBar centered"}>
+                        <div className={"iconControl x-lg"} style={paletteStyle} onClick={() => this.setState({paletteActive: "opened"})}>
+                            <FontAwesomeIcon className={brushClass} icon={faPaintBrush}/>
                         </div>
-                        <div className={"canvasControl"} onClick={() => this.setState({thicknessActive: true})}>
-                            <div style={thicknessStyle}/>
+                        <div className={"iconControl x-lg"} onClick={() => this.setState({thicknessActive: "opened"})}>
+                            <div className={"brushThickness-"+brushRadius}/>
                         </div>
-                        <div className={"canvasControl"} onClick={() => this.undo()}>
+                        <div className={"iconControl x-lg"} onClick={() => this.undo()}>
                             <FontAwesomeIcon icon={faUndo}/>
                         </div>
-                        <div className={"canvasControl"} onClick={() => this.draw()}>
+                        <div className={"iconControl x-lg"} onClick={() => this.draw()}>
                             <FontAwesomeIcon icon={faPaperPlane}/>
                         </div>
                     </div>

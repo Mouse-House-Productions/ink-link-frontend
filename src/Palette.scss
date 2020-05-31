@@ -1,3 +1,5 @@
+@import 'colors';
+
 .grid {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -8,8 +10,12 @@
 }
 
 .grid-button {
-    border-radius: 35%;
+    border-radius: 40%;
     width: 10vh;
     height: 10vh;
     border: 0.5vh solid black;
+}
+
+.grid-button:active {
+    background: black;
 }

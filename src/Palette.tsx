@@ -1,5 +1,5 @@
 import React, {CSSProperties} from 'react';
-import "./Palette.css";
+import "./Palette.scss";
 import Slider from "./Slider";
 import {HSL, hsl, css} from "./HSL";
 
@@ -38,6 +38,7 @@ const PALETTE = [
 export interface IPaletteProps {
     select?: ((hsl: HSL) => void) | null;
     cancel?: (() => void) | null;
+    active: "closed" | "opened" | "hidden";
 }
 
 class Palette extends React.Component<IPaletteProps> {
@@ -59,9 +60,9 @@ class Palette extends React.Component<IPaletteProps> {
             const style : CSSProperties = {
                 background: css(c)
             }
-            return (<div key={css(c)} className="grid-button" style={style} onClick={() => this.select(c)}></div>)
+            return (<div key={css(c)} className="grid-button" style={style} onClick={() => this.select(c)}/>)
         })
-        return <Slider active={true} cancel={() => this.cancel()}>
+        return <Slider active={this.props.active} cancel={() => this.cancel()}>
             <div className="grid">{buttons}</div>
         </Slider>
     }

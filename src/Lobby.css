@@ -1,0 +1,26 @@
+.Lobby {
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    padding: 0.5rem;
+}
+
+.Lobby > * {
+    width: 95vw;
+}
+
+.list {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: flex-start;
+    justify-content: flex-end;
+    overflow-y: scroll;
+    flex-grow: 1;
+    border: 1px solid #3d405b;
+    padding: 1rem;
+    margin: 0.5rem;
+}
+

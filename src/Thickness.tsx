@@ -5,6 +5,7 @@ import "./Thickness.css"
 export interface ThicknessProps {
     select?: ((radius: number) => void) | null;
     cancel?: (() => void) | null;
+    active: "closed" | "opened" | "hidden";
 }
 
 const RADII = [
@@ -14,9 +15,9 @@ const RADII = [
 class Thickness extends React.Component<ThicknessProps> {
 
     select(radius: number) : void{
-       if (this.props.select) {
-           this.props.select(radius);
-       }
+        if (this.props.select) {
+            this.props.select(radius);
+        }
     }
 
     cancel() : void {
@@ -29,19 +30,14 @@ class Thickness extends React.Component<ThicknessProps> {
     render() {
         let buttons = RADII.map(c => {
             const style : CSSProperties = {
-                width: c*2+"px",
-                height: c*2+"px",
-                borderRadius: "50%",
-                background: "black",
-                border: "none",
                 display: "block",
                 position: "relative",
                 top: "calc(50% - "+c+"px)",
                 left: "calc(50% - "+c+"px)",
             }
-            return (<div className={"grid-button"} onClick={() => this.select(c)}><div style={style}/></div>)
+            return (<div key={"brushThicknessButton-"+c} className={"grid-button"} onClick={() => this.select(c)}><div className={"brushThickness-"+c} style={style}/></div>)
         })
-        return <Slider active={true} cancel={() => this.cancel()} speed={"fast"}>
+        return <Slider active={this.props.active} cancel={() => this.cancel()} speed={"fast"}>
             <div className="column">
                 {buttons}
             </div>

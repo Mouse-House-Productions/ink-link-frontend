@@ -1,23 +1,46 @@
-.present {
+.Present {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    padding: 0.5rem;
+}
+
+.Present > * {
+    padding: 1rem;
+    width: 100vw;
 }
 
 .book {
     display: flex;
+    flex-grow: 1;
     flex-direction: column-reverse;
     align-items: center;
-    justify-content: flex-end;
-    height: 90vh;
-    overflow-y: scroll;
+    justify-content: center;
     width: 100vw;
+    padding: 0;
 }
 
 .presentImage {
-    max-width: 95vw;
-    border: 2px solid brown;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.presentImage > img {
+    max-height: calc(var(--vh, 1vh) * 65);
+    background: #ffffff;
+    border: 2px solid #223843;
+}
+
+.presentCaption {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    max-width: 90vw;
+    overflow-x: auto;
+    white-space: nowrap;
 }
 
 .presentControls {

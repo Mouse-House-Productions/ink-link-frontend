@@ -14,6 +14,13 @@ interface DescribeState {
 
 class Describe extends React.Component<DescribeProps, DescribeState> {
 
+    constructor(props : DescribeProps) {
+        super(props);
+        this.state = {
+            description: ''
+        }
+    }
+
     describe() {
         const description = this.state.description;
         if (description && description.length > 0) {
@@ -35,19 +42,21 @@ class Describe extends React.Component<DescribeProps, DescribeState> {
     }
 
     public render() {
-        //TODO: If props.img is null/undefined we should change the placeholder text
-        const placeholder = (this.props.img) ? "Say what you see!" : "Write a prompt to get us started!";
-        return (<div className={"fullScreen"}>
+        let content = this.props.img;
+        const placeholder = content ? "Say what you see!" : "Write a prompt to get started!";
+        const imgD = content ? [(<img className={"captionTarget"} src={content} alt={content ? "Sketch" : ""}/>)] : []
+        return (
             <div className={"describe"}>
-                <img className={"captionTarget"} src={this.props.img} alt={this.props.img ? "Sketch" : ""}/>
+                <div className={"spacer"}/>
+                {imgD}
                 <div className={"captionInput"}>
-                    <input type={"text"} placeholder={placeholder} onChange={e => this.setDescription(e)} onKeyDown={this.handleKeyDown}/>
-                    <div className={"captionControl"} onClick={() => this.describe()}>
+                    <input className={"captionField"} type={"text"} placeholder={placeholder} onChange={e => this.setDescription(e)} onKeyDown={this.handleKeyDown}/>
+                    <div className={"iconControl lg"} onClick={() => this.describe()}>
                         <FontAwesomeIcon icon={faPaperPlane}/>
                     </div>
                 </div>
-            </div>
-        </div>)
+                <div className={"spacer"}/>
+            </div>)
     }
 
 }

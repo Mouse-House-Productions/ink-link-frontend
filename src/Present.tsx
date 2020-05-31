@@ -1,11 +1,12 @@
 import React from "react";
 import {BookEntry} from "./App";
-import './Present.css';
-import {faArrowRight, faArrowLeft} from '@fortawesome/free-solid-svg-icons';
+import './Present.scss';
+import {faArrowRight, faArrowLeft, faTimes} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 interface PresentProps {
    book: BookEntry[];
+   close: (() => void);
 }
 
 interface PresentState {
@@ -22,12 +23,11 @@ class Present extends React.Component<PresentProps, PresentState> {
    }
 
    renderBookEntry(entry : BookEntry) : JSX.Element {
-      if (entry.type === "description") {
-         return (<div>{entry.contents}</div>);
-      } else if (entry.type === "depiction") {
-         return (<div><img key={entry.contents} className={"presentImage"} src={entry.contents} alt={"Depiction"}/></div>)
-      } else {
-         throw new Error("Unable to render book entry");
+      switch (entry.type) {
+         case "description":
+            return (<div key={entry.contents+entry.author} className={"presentCaption"}>{entry.author + ": \"" + entry.contents + "\""}</div>);
+         case "depiction":
+            return (<div className={"presentImage"}><img key={entry.contents} src={entry.contents} alt={"Depiction"}/><h5>by {entry.author}</h5></div>)
       }
    }
 
@@ -48,16 +48,24 @@ class Present extends React.Component<PresentProps, PresentState> {
    }
 
    public render() {
-      const es = this.props.book.slice(0, this.state.progress).map(this.renderBookEntry);
-      return (<div className={"fullScreen present"}>
+      const titleText = this.props.book[0].author + "'s Book";
+      const es = this.props.book.slice(Math.max(this.state.progress - 2, 0), this.state.progress).map(this.renderBookEntry)
+      return (<div className={"Present"}>
+         <div className={"row"}>
+            <span className={"title rainbow"}>{titleText}</span>
+            <div className={"spacer"}/>
+            <div className={"iconControl danger"} onClick={() => this.props.close()}>
+               <FontAwesomeIcon icon={faTimes}/>
+            </div>
+         </div>
          <div className={"book"}>
             {es}
          </div>
-         <div className={"presentControls"}>
-            <div className={"presentControl"} onClick={() => this.prev()}>
+         <div className={"controlBar centered"}>
+            <div className={"iconControl"} onClick={() => this.prev()}>
                <FontAwesomeIcon icon={faArrowLeft}/>
             </div>
-            <div className={"presentControl"} onClick={() => this.next()}>
+            <div className={"iconControl"} onClick={() => this.next()}>
                <FontAwesomeIcon icon={faArrowRight}/>
             </div>
          </div>

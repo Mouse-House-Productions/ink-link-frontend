@@ -1,0 +1,57 @@
+@import 'colors';
+
+.Ink {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.Ink > * {
+    margin-top: 0.5rem;
+}
+
+.canvasControl {
+    touch-action: manipulation;
+    border: 0.125rem solid #223843;
+    border-radius: 50%;
+    width: 3rem;
+    height: 3rem;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    box-shadow: 3px 3px 0 0 #ccc;
+}
+
+.canvasControl:not(:first-child) {
+    margin-left: 1rem;
+}
+
+.canvasControls {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+}
+
+$sizes: 15;
+
+@for $i from 1 through $sizes {
+    .brushThickness-#{$i} {
+        border-radius: 50%;
+        border: none;
+        background: black;
+        width: calc(2*#{$i}px);
+        height: calc(2*#{$i}px);
+    }
+
+    .iconControl > .brushThickness-#{$i} {
+        background: $accent;
+    }
+
+    *:active > .brushThickness-#{$i}{
+        background: $accentLight;
+    }
+
+}
+

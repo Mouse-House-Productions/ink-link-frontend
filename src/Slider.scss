@@ -1,0 +1,65 @@
+@import 'colors';
+@mixin prefix ($prop, $val...) {
+    -webkit-#{$prop}: #{$val};
+    -moz-#{$prop}: #{$val};
+    -ms-#{$prop}: #{$val};
+    #{$prop}: #{$val};
+}
+
+$offscreen: calc(-100% - 9px);
+
+//noinspection CssOverwrittenProperties
+.slider-container {
+    position: absolute;
+    display: block;
+    height: 100vh; /* Fallback for browsers that do not support custom properties */
+    height: calc(var(--vh, 1vh) * 100);
+    transform: translateX($offscreen);
+    background: white;
+    box-shadow: 3px 3px 3px 3px #ccc;
+    z-index: 10000;
+}
+
+.slider-container > * {
+    padding-left: 1vh;
+    padding-right: 1vh;
+}
+
+.cancel {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    top: 0;
+    left: 0;
+}
+
+.slide-in {
+    @include prefix(animation, slide-in 0.5s forwards);
+}
+
+.slide-in.fast {
+    @include prefix(animation, slide-in 0.25s forwards);
+}
+
+.slide-in.slow {
+    @include prefix(animation, slide-in 0.75s forwards);
+
+}
+
+.slide-out {
+    @include prefix(animation, slide-out 0.2s forwards);
+    transform: translateX(0);
+}
+
+@keyframes slide-in {
+    100% {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slide-out {
+    100%  {
+        transform: translateX($offscreen);
+    }
+}
