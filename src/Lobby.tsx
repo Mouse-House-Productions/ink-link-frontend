@@ -5,28 +5,32 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 export interface Player {
     name: string,
-    uuid: string
+    id: string
 }
 
 interface LobbyState {
 }
 
-interface LobbyProps {
+export interface Room{
     name: string;
     players: Player[];
+}
+
+export interface LobbyProps {
+    room: Room;
     submit: (() => void);
 }
 
 class Lobby extends React.Component<LobbyProps, LobbyState> {
 
     renderPlayer(player: Player) : JSX.Element {
-        return <div key={player.uuid}><h4>{player.name}</h4></div>;
+        return <div key={player.id}><h4>{player.name}</h4></div>;
     }
 
     public render() {
-        const players = this.props.players.map(this.renderPlayer);
+        const players = this.props.room.players.map(this.renderPlayer);
         return (<div className={"Lobby"}>
-            <div className={"row center"}><div className={"title rainbow"}>Lobby {this.props.name}</div></div>
+            <div className={"row center"}><div className={"title rainbow"}>Lobby {this.props.room.name}</div></div>
             <div className={"list"}>
                 {players}
             </div>

@@ -30,6 +30,7 @@
 
 .presentImage > img {
     max-height: calc(var(--vh, 1vh) * 65);
+    max-width: 95vw;
     background: #ffffff;
     border: 2px solid #223843;
 }

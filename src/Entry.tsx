@@ -1,5 +1,5 @@
 import React, {ChangeEvent} from "react";
-import './Entry.css';
+import './Entry.scss';
 import {faArrowRight} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
@@ -48,6 +48,8 @@ class Entry extends React.Component<EntryFormProps, EntryFormState> {
                 <input className={"entryInput"} type={"text"} defaultValue={this.state.name} placeholder={"Name"} onChange={e => this.setName(e)}/>
                 <input className={"entryInput"} type={"text"} defaultValue={this.state.roomCode} placeholder={"Room Code"} onChange={e => this.setRoomCode(e)}/>
                 <div className={"row row-reverse"}><div onClick={() => this.submit()} className={"iconControl success"}><FontAwesomeIcon icon={faArrowRight}/></div></div>
+                <div className={"spacer"}/>
+                <div className={"logo"}/>
             </div>)
     }
 }

@@ -1,25 +1,20 @@
 import React from "react";
-import {BookEntry} from "./App";
+import {Book, BookEntry} from "./App";
 import './Present.scss';
 import {faArrowRight, faArrowLeft, faTimes} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 interface PresentProps {
-   book: BookEntry[];
+   book?: Book;
    close: (() => void);
-}
-
-interface PresentState {
+   updateProgress: (p : number) => void;
    progress: number;
 }
 
-class Present extends React.Component<PresentProps, PresentState> {
+class Present extends React.Component<PresentProps> {
 
    constructor(props : PresentProps) {
       super(props);
-      this.state = {
-         progress: 0
-      }
    }
 
    renderBookEntry(entry : BookEntry) : JSX.Element {
@@ -32,44 +27,44 @@ class Present extends React.Component<PresentProps, PresentState> {
    }
 
    next() {
-      this.setState((state) => {
-         return {
-            progress: Math.min(this.props.book.length, state.progress + 1)
-         }
-      })
+      if (this.props.book) {
+         this.props.updateProgress(Math.min(this.props.book.pages.length, this.props.progress + 1));
+      }
    }
 
    prev() {
-      this.setState((state) => {
-         return {
-            progress: Math.max(0, state.progress - 1)
-         }
-      })
+      this.props.updateProgress(Math.max(0, this.props.progress - 1));
    }
 
    public render() {
-      const titleText = this.props.book[0].author + "'s Book";
-      const es = this.props.book.slice(Math.max(this.state.progress - 2, 0), this.state.progress).map(this.renderBookEntry)
-      return (<div className={"Present"}>
-         <div className={"row"}>
-            <span className={"title rainbow"}>{titleText}</span>
-            <div className={"spacer"}/>
-            <div className={"iconControl danger"} onClick={() => this.props.close()}>
-               <FontAwesomeIcon icon={faTimes}/>
+      if (this.props.book) {
+         const titleText = this.props.book.author + "'s Book";
+         let progress = Math.min(Math.max(this.props.progress, 0), this.props.book.pages.length);
+         const es = this.props.book.pages.slice(Math.max(progress - 2, 0), progress).map(this.renderBookEntry)
+         return (<div className={"Present"}>
+            <div className={"row"}>
+               <span className={"title rainbow"}>{titleText}</span>
+               <div className={"spacer"}/>
+               <div className={"iconControl danger"} onClick={() => this.props.close()}>
+                  <FontAwesomeIcon icon={faTimes}/>
+               </div>
             </div>
-         </div>
-         <div className={"book"}>
-            {es}
-         </div>
-         <div className={"controlBar centered"}>
-            <div className={"iconControl"} onClick={() => this.prev()}>
-               <FontAwesomeIcon icon={faArrowLeft}/>
+            <div className={"book"}>
+               {es}
             </div>
-            <div className={"iconControl"} onClick={() => this.next()}>
-               <FontAwesomeIcon icon={faArrowRight}/>
+            <div className={"controlBar centered"}>
+               <div className={"iconControl"} onClick={() => this.prev()}>
+                  <FontAwesomeIcon icon={faArrowLeft}/>
+               </div>
+               <div className={"iconControl"} onClick={() => this.next()}>
+                  <FontAwesomeIcon icon={faArrowRight}/>
+               </div>
             </div>
-         </div>
-      </div>)
+         </div>)
+      } else {
+         this.props.close();
+         return <div/>
+      }
    }
 }
 

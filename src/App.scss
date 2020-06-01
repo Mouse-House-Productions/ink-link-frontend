@@ -28,12 +28,22 @@ body {
     display: block;
 }
 
+.title.center {
+    text-align: center;
+}
+
+.title.raw {
+    text-transform: none;
+}
+
 .title.large {
     font-size: 50pt;
 }
 
 .rainbow.large {
     -webkit-text-stroke: 3px black;
+    padding-left: 3px;
+    padding-right: 3px;
 }
 
 //noinspection CssInvalidPropertyValue

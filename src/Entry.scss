@@ -1,3 +1,5 @@
+@import 'colors';
+
 .entryInput {
     box-shadow: 3px 3px 0 0 #ccc;
 }
@@ -8,6 +10,7 @@
     justify-items: center;
     align-items: center;
     padding-top: 1rem;
+    padding-bottom: 2rem;
 }
 
 .Entry > * {
@@ -17,4 +20,12 @@
 .Entry > :not(:first-child) {
     margin-top: 1rem;
 }
+
+.logo {
+    background: url('./logo.svg');
+    width: 30vh;
+    height: 30vh;
+    background-size: cover;
+}
+
 
