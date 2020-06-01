@@ -39,7 +39,6 @@ interface IAppState {
     progress: number;
 }
 
-const ROUND_LENGTH = 7;
 const API_URL = process.env.REACT_APP_API_URL;
 
 class App extends React.Component<IAppProps, IAppState> {
