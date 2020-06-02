@@ -47,7 +47,7 @@ class App extends React.Component<IAppProps, IAppState> {
     constructor(props: Readonly<IAppProps>) {
         super(props);
         this.state = {
-            view: "init",
+            view: "ink",
             name: "",
             lobby: {
                 name: "",

@@ -6,6 +6,7 @@ import {faPaintBrush, faPaperPlane, faUndo} from "@fortawesome/free-solid-svg-ic
 import {cssString, hsl, HSL} from "./HSL";
 import Palette from "./Palette";
 import Thickness from "./Thickness";
+import KeyboardEventHandler from 'react-keyboard-event-handler';
 
 interface InkState {
     canvasProps : CanvasDrawProps;
@@ -136,6 +137,7 @@ class Ink extends React.Component<InkProps, InkState> {
                         </div>
                     </div>
                 </div>
+                <KeyboardEventHandler handleKeys={['ctrl+z']} onKeyEvent={() => this.undo()}/>
             </div>
         )
     }
