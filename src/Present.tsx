@@ -13,10 +13,6 @@ interface PresentProps {
 
 class Present extends React.Component<PresentProps> {
 
-   constructor(props : PresentProps) {
-      super(props);
-   }
-
    renderBookEntry(entry : BookEntry) : JSX.Element {
       switch (entry.type) {
          case "description":

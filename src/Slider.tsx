@@ -7,18 +7,7 @@ export interface SliderProps {
     speed?: "slow" | "med" | "fast" | null;
 }
 
-export interface SliderState {
-    cancelled ?: boolean
-}
-
-class Slider extends React.Component<SliderProps, SliderState> {
-
-    constructor(props : SliderProps) {
-        super(props);
-        this.state = {
-            cancelled: false
-        }
-    }
+class Slider extends React.Component<SliderProps> {
 
     cancel() {
         if (this.props.cancel) {

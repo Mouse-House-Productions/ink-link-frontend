@@ -8,6 +8,7 @@ import Entry from "./Entry";
 import Waiting from "./Waiting";
 import Lobby, {Room} from "./Lobby";
 import PresentList from "./PresentList";
+import ConfirmationPopup from "./ConfirmationPopup";
 
 interface IAppProps {
 }
@@ -37,6 +38,7 @@ interface IAppState {
     jobId?: string;
     galleryId?: string;
     progress: number;
+    popup: "closed" | "opened" | "hidden";
 }
 
 const API_URL = process.env.REACT_APP_API_URL;
@@ -47,7 +49,7 @@ class App extends React.Component<IAppProps, IAppState> {
     constructor(props: Readonly<IAppProps>) {
         super(props);
         this.state = {
-            view: "ink",
+            view: "init",
             name: "",
             lobby: {
                 name: "",
@@ -59,7 +61,8 @@ class App extends React.Component<IAppProps, IAppState> {
                 author: '',
                 pages: []
             },
-            progress: 0
+            progress: 0,
+            popup: "hidden"
         }
         window.setInterval(() => this.refreshState(), 1000)
     }
@@ -258,9 +261,16 @@ class App extends React.Component<IAppProps, IAppState> {
         });
     }
 
+    cancel() {
+        this.setState({
+            popup: "closed"
+        })
+    }
+
     public render() {
         let view = this.view();
         return (<div className={"fullScreen"}>
+            <ConfirmationPopup active={this.state.popup} cancel={() => this.cancel()} affirm={() => {}} question={"Do you want to return to your current game?"}/>
             {view}
         </div>);
     }

@@ -2,6 +2,8 @@
 
 .entryInput {
     box-shadow: 3px 3px 0 0 #ccc;
+    line-height: 1.75rem;
+    font-size: 1.75rem;
 }
 
 .Entry {
@@ -10,7 +12,7 @@
     justify-items: center;
     align-items: center;
     padding-top: 1rem;
-    padding-bottom: 2rem;
+    padding-bottom: 1rem;
 }
 
 .Entry > * {

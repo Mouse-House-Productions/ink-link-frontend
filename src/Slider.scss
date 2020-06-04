@@ -1,10 +1,5 @@
 @import 'colors';
-@mixin prefix ($prop, $val...) {
-    -webkit-#{$prop}: #{$val};
-    -moz-#{$prop}: #{$val};
-    -ms-#{$prop}: #{$val};
-    #{$prop}: #{$val};
-}
+@import 'prefix';
 
 $offscreen: calc(-100% - 9px);
 

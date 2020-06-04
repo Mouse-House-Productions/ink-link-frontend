@@ -36,7 +36,7 @@ class Describe extends React.Component<DescribeProps, DescribeState> {
     }
 
     handleKeyDown : KeyboardEventHandler = evt => {
-        if (evt.key === "enter") {
+        if (evt.key === "Enter") {
             this.describe();
         }
     }
