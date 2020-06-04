@@ -82,6 +82,32 @@ class Entry extends React.Component<EntryFormProps, EntryFormState> {
     public render() {
         return (
             <div className={"Entry"}>
+                <InfoPopup active={this.state.infoPopup} close={() => this.closeInfoPopup()}>
+                    <div className={"row wide"}>
+                        <h1>About</h1>
+                        <div className={"spacer"}/>
+                        <div className={"iconControl danger lg"} onClick={() => this.closeInfoPopup()}>
+                            <FontAwesomeIcon icon={faTimes}/>
+                        </div>
+                    </div>
+                    <span>Ink Link is the first game from <a href={"https://twitter.com/MouseHouseDev"}>Mouse House</a>, a team of mouse spouses making internet games. If you're looking for how to play, close this popup and hit <div className={"iconControl info inline"}><FontAwesomeIcon icon={faQuestion}/></div>.</span>
+                    <span>This was developed with a mobile browser focus over the course of a few long weekends. We leveraged a bunch of great existing technologies which allowed us to build this in a relatively short timespan.</span>
+                    <h4>Frontend Stack:</h4>
+                    <ul>
+                        <li>Served by <a href={"https://www.netlify.com/"}>Netlify</a>.</li>
+                        <li>Written in <a href={"https://reactjs.org/"}>React</a> with <a href={"https://www.typescriptlang.org/"}>TypeScript</a>.</li>
+                        <li>Icons by <a href={"https://fontawesome.com/"}>Font Awesome</a>.</li>
+                        <li>Canvas component <a href={"https://github.com/embiem/react-canvas-draw"}>react-canvas-draw</a>.</li>
+                        <li>Global keyboard event handler <a href={"https://github.com/linsight/react-keyboard-event-handler"}>react-keyboard-event-handler</a>.</li>
+                        <li>Font is <a href={"https://fonts.google.com/specimen/Caveat+Brush"}>Caveat Brush</a></li>
+                    </ul>
+                    <h4>Backend Stack:</h4>
+                    <ul>
+                        <li>Server written on top of <a href={"https://github.com/expressjs/express"}>express</a>.</li>
+                        <li>Database provided by <a href={"https://supabase.io/"}>supabase</a>.</li>
+                        <li>Database client written with <a href={"https://node-postgres.com/"}>node-postgres</a>.</li>
+                    </ul>
+                </InfoPopup>
                 <InfoPopup active={this.state.howToPopup} close={() => this.closeHowToPopup()}>
                     <div className={"row wide"}>
                         <h1>How to play</h1>
