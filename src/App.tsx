@@ -42,6 +42,7 @@ interface IAppState {
     popup: "closed" | "opened" | "hidden";
     savedPlayerId?: string;
     savedRoomId?: string;
+    savedRoomName?: string;
     savedPicture?: string;
 }
 
@@ -49,6 +50,7 @@ const API_URL = process.env.REACT_APP_API_URL;
 
 const PLAYER_ID_LOCAL_KEY = 'playerId';
 const ROOM_ID_LOCAL_KEY = 'roomId';
+const ROOM_NAME_LOCAL_KEY = 'roomCode';
 const PICTURE_BACKUP_KEY = 'pictureBackup';
 
 class App extends React.Component<IAppProps, IAppState> {
@@ -59,6 +61,7 @@ class App extends React.Component<IAppProps, IAppState> {
         const savedPlayerId = reactLocalStorage.get(PLAYER_ID_LOCAL_KEY);
         const savedRoomId = reactLocalStorage.get(ROOM_ID_LOCAL_KEY);
         const savedPicture = reactLocalStorage.get(PICTURE_BACKUP_KEY);
+        const savedRoomName = reactLocalStorage.get(ROOM_NAME_LOCAL_KEY);
         this.state = {
             view: "init",
             name: "",
@@ -76,7 +79,8 @@ class App extends React.Component<IAppProps, IAppState> {
             popup: (savedPlayerId && savedRoomId) ? "opened" : "hidden",
             savedPlayerId,
             savedRoomId,
-            savedPicture
+            savedPicture,
+            savedRoomName
         }
         window.setInterval(() => this.refreshState(), 1000)
     }
@@ -217,6 +221,7 @@ class App extends React.Component<IAppProps, IAppState> {
         }).then(resp => {
             resp.json().then(responseJson => {
                 reactLocalStorage.set(PLAYER_ID_LOCAL_KEY, responseJson.id);
+                reactLocalStorage.remove(PICTURE_BACKUP_KEY); //We're a new player so make sure we throw away any backed up drawings
                 this.setState({
                     playerId: responseJson.id
                 }, () => {
@@ -229,6 +234,7 @@ class App extends React.Component<IAppProps, IAppState> {
                     }).then(resp => {
                         resp.json().then(responseJson => {
                             reactLocalStorage.set(ROOM_ID_LOCAL_KEY, responseJson.id);
+                            reactLocalStorage.set(ROOM_NAME_LOCAL_KEY, responseJson.roomCode);
                             this.setState({
                                 roomId: responseJson.id,
                                 lobby: {
@@ -292,7 +298,11 @@ class App extends React.Component<IAppProps, IAppState> {
                 view: "lobby",
                 popup: "closed",
                 roomId: prevState.savedRoomId,
-                playerId: prevState.savedPlayerId
+                playerId: prevState.savedPlayerId,
+                lobby: {
+                    name: prevState.savedRoomName ? prevState.savedRoomName : '',
+                    players: []
+                }
             }
         });
     }
