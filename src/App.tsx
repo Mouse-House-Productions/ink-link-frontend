@@ -9,6 +9,7 @@ import Waiting from "./Waiting";
 import Lobby, {Room} from "./Lobby";
 import PresentList from "./PresentList";
 import ConfirmationPopup from "./ConfirmationPopup";
+import {reactLocalStorage} from 'reactjs-localstorage';
 
 interface IAppProps {
 }
@@ -39,15 +40,25 @@ interface IAppState {
     galleryId?: string;
     progress: number;
     popup: "closed" | "opened" | "hidden";
+    savedPlayerId?: string;
+    savedRoomId?: string;
+    savedPicture?: string;
 }
 
 const API_URL = process.env.REACT_APP_API_URL;
+
+const PLAYER_ID_LOCAL_KEY = 'playerId';
+const ROOM_ID_LOCAL_KEY = 'roomId';
+const PICTURE_BACKUP_KEY = 'pictureBackup';
 
 class App extends React.Component<IAppProps, IAppState> {
 
 
     constructor(props: Readonly<IAppProps>) {
         super(props);
+        const savedPlayerId = reactLocalStorage.get(PLAYER_ID_LOCAL_KEY);
+        const savedRoomId = reactLocalStorage.get(ROOM_ID_LOCAL_KEY);
+        const savedPicture = reactLocalStorage.get(PICTURE_BACKUP_KEY);
         this.state = {
             view: "init",
             name: "",
@@ -62,7 +73,10 @@ class App extends React.Component<IAppProps, IAppState> {
                 pages: []
             },
             progress: 0,
-            popup: "hidden"
+            popup: (savedPlayerId && savedRoomId) ? "opened" : "hidden",
+            savedPlayerId,
+            savedRoomId,
+            savedPicture
         }
         window.setInterval(() => this.refreshState(), 1000)
     }
@@ -186,7 +200,10 @@ class App extends React.Component<IAppProps, IAppState> {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({id: this.state.jobId, contents: contents})
-        }).then(() => this.waiting());
+        }).then(() => {
+            reactLocalStorage.remove(PICTURE_BACKUP_KEY);
+            this.waiting()
+        });
     }
 
     enterRoom(playerName: string, joinCode: string) : void {
@@ -199,6 +216,7 @@ class App extends React.Component<IAppProps, IAppState> {
             body: JSON.stringify({playerName})
         }).then(resp => {
             resp.json().then(responseJson => {
+                reactLocalStorage.set(PLAYER_ID_LOCAL_KEY, responseJson.id);
                 this.setState({
                     playerId: responseJson.id
                 }, () => {
@@ -210,6 +228,7 @@ class App extends React.Component<IAppProps, IAppState> {
                         body: JSON.stringify({joinCode, playerId: this.state.playerId})
                     }).then(resp => {
                         resp.json().then(responseJson => {
+                            reactLocalStorage.set(ROOM_ID_LOCAL_KEY, responseJson.id);
                             this.setState({
                                 roomId: responseJson.id,
                                 lobby: {
@@ -261,16 +280,31 @@ class App extends React.Component<IAppProps, IAppState> {
         });
     }
 
-    cancel() {
+    declineRejoin() {
         this.setState({
             popup: "closed"
         })
     }
 
+    acceptRejoin() {
+        this.setState(prevState => {
+            return {
+                view: "lobby",
+                popup: "closed",
+                roomId: prevState.savedRoomId,
+                playerId: prevState.savedPlayerId
+            }
+        });
+    }
+
+    saveDrawing(img: string) {
+        reactLocalStorage.set(PICTURE_BACKUP_KEY, img);
+    }
+
     public render() {
         let view = this.view();
         return (<div className={"fullScreen"}>
-            <ConfirmationPopup active={this.state.popup} cancel={() => this.cancel()} affirm={() => {}} question={"Do you want to return to your current game?"}/>
+            <ConfirmationPopup active={this.state.popup} cancel={() => this.declineRejoin()} affirm={() => this.acceptRejoin()} question={"Do you want to return to your current game?"}/>
             {view}
         </div>);
     }
@@ -286,7 +320,7 @@ class App extends React.Component<IAppProps, IAppState> {
             case "present":
                 return <Present book={this.state.book} close={() => this.closePresent()} progress={this.state.progress} updateProgress={p => this.updateGallery(this.state.galleryId, undefined, p)}/>
             case "ink":
-                return <Ink prompt={this.state.description} draw={img => this.completeJob(img)}/>
+                return <Ink prompt={this.state.description} draw={img => this.completeJob(img)} save={img => this.saveDrawing(img)} saved={this.state.savedPicture}/>
             case "describe":
                 return <Describe describe={d => this.completeJob(d)} img={this.state.img}/>
             case "gallery":

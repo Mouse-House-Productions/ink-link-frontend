@@ -19,8 +19,10 @@ interface InkState {
 }
 
 interface InkProps {
-    prompt?: string | null,
-    draw: ((img: string) => void)
+    prompt?: string | null;
+    saved?: string;
+    draw: ((img: string) => void);
+    save: ((img: string) => void);
 }
 
 
@@ -84,7 +86,7 @@ class Ink extends React.Component<InkProps, InkState> {
         this.setState({
             undo: () => c.undo(),
             img
-        });
+        }, () => this.props.save(c.getSaveData()));
     }
 
     undo() : void {
@@ -101,11 +103,13 @@ class Ink extends React.Component<InkProps, InkState> {
 
     public render() {
         let brushHsl = this.state.brushColor;
-        const canvasProps = {
+        const canvasProps : CanvasDrawProps = {
             ...this.state.canvasProps,
             disabled: (this.state.canvasProps.disabled) || (this.state.paletteActive === "opened") || (this.state.thicknessActive === "opened"),
             brushColor: cssString(brushHsl),
-            onChange: (c : CanvasDraw) => this.setImage(c)
+            onChange: (c : CanvasDraw) => this.setImage(c),
+            saveData: this.props.saved,
+            immediateLoading: !!this.props.saved
         };
 
         const brushRadius = canvasProps.brushRadius || DEFAULT_BRUSH_RADIUS;
