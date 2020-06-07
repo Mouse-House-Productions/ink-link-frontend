@@ -100,7 +100,7 @@ class Ink extends React.Component<InkProps, InkState> {
                 context.fillStyle = "#FFFFFF";
                 context.fillRect(0, 0, trgCanvas.width, trgCanvas.height);
                 context.drawImage(srcCanvas, 0, 0);
-                img = trgCanvas.toDataURL("image/webp", 1);
+                img = trgCanvas.toDataURL("image/png", 1);
             }
         } catch (ex) {
             //ignored
