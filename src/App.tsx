@@ -67,7 +67,8 @@ class App extends React.Component<IAppProps, IAppState> {
             name: "",
             lobby: {
                 name: "",
-                players: []
+                players: [],
+                galleries: []
             },
             books: [],
             book: {
@@ -109,7 +110,8 @@ class App extends React.Component<IAppProps, IAppState> {
                 return {
                     lobby: {
                         ...lobby,
-                        players: json.players
+                        players: json.players,
+                        galleries: json.galleries
                     },
                     galleryId: json.galleryId,
                     view: (json.galleryId === '') ? "lobby" : "waiting"
@@ -120,7 +122,7 @@ class App extends React.Component<IAppProps, IAppState> {
 
     private gallery() {
         if (this.state.books.length === 0) {
-            fetch(API_URL + '/gallery/books?galleryId=' + this.state.galleryId, {
+            fetch(API_URL + 'gallery/books?galleryId=' + this.state.galleryId, {
                 method: "GET"
             }).then(resp => resp.json().then(json => {
                 this.setState({
@@ -128,7 +130,7 @@ class App extends React.Component<IAppProps, IAppState> {
                 }, () => this.gallery())
             }))
         } else {
-            fetch(API_URL + '/gallery?galleryId=' + this.state.galleryId, {
+            fetch(API_URL + 'gallery?galleryId=' + this.state.galleryId, {
                 method: "GET"
             }).then(resp => resp.json().then(json => {
                 this.setState(prevState => {
@@ -240,6 +242,7 @@ class App extends React.Component<IAppProps, IAppState> {
                                 lobby: {
                                     name: responseJson.roomCode,
                                     players: responseJson.players,
+                                    galleries: responseJson.galleries
                                 },
                                 view: "lobby"
                             })
@@ -301,6 +304,7 @@ class App extends React.Component<IAppProps, IAppState> {
                 playerId: prevState.savedPlayerId,
                 lobby: {
                     name: prevState.savedRoomName ? prevState.savedRoomName : '',
+                    galleries: [],
                     players: []
                 }
             }
@@ -309,6 +313,24 @@ class App extends React.Component<IAppProps, IAppState> {
 
     saveDrawing(img: string) {
         reactLocalStorage.set(PICTURE_BACKUP_KEY, img);
+    }
+
+    downloadGallery(galleryId?: string) {
+        const id = (galleryId) ? galleryId : this.state.galleryId;
+        if (id) {
+            fetch(API_URL + 'gallery/download?galleryId=' + id, {
+                method: "GET",
+                headers: {
+                    'Accept': 'text/html; charset=UTF-8'
+                }
+            }).then(resp => resp.blob().then(b => {
+                const date = new Date();
+                const anchor = document.createElement('a');
+                anchor.href = URL.createObjectURL(b);
+                anchor.download = 'inklink-' + date.getDate().toString().padStart(2, '0') + date.getMonth().toString().padStart(2, '0') + date.getFullYear() + '-' + date.getHours().toString().padStart(2, '0') + date.getMinutes().toString().padStart(2, '0') + '.html';
+                anchor.click();
+            }));
+        }
     }
 
     public render() {
@@ -326,7 +348,7 @@ class App extends React.Component<IAppProps, IAppState> {
             case "waiting":
                 return <Waiting/>
             case "lobby":
-                return <Lobby room={this.state.lobby} submit={() => this.startGame()}/>
+                return <Lobby room={this.state.lobby} submit={() => this.startGame()} download={id => this.downloadGallery(id)}/>
             case "present":
                 return <Present book={this.state.book} close={() => this.closePresent()} progress={this.state.progress} updateProgress={p => this.updateGallery(this.state.galleryId, undefined, p)}/>
             case "ink":
@@ -334,7 +356,7 @@ class App extends React.Component<IAppProps, IAppState> {
             case "describe":
                 return <Describe describe={d => this.completeJob(d)} img={this.state.img}/>
             case "gallery":
-                return <PresentList books={this.state.books} present={book => this.present(book)} close={() => this.closeGallery()}/>
+                return <PresentList books={this.state.books} present={book => this.present(book)} close={() => this.closeGallery()} download={() => this.downloadGallery()}/>
         }
     }
 }

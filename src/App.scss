@@ -127,6 +127,10 @@ body {
     height: 3.5rem;
 }
 
+.danger {
+    color: $danger;
+}
+
 .iconControl.danger {
     border-color: $danger;
     > * {

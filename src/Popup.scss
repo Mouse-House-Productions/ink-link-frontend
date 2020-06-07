@@ -5,7 +5,7 @@
 .popup-container {
   position: absolute;
   display: flex;
-  width: 100vw;
+  width: 100vw !important;
   height: 100vh; /* Fallback for browsers that do not support custom properties */
   height: calc(var(--vh, 1vh) * 100);
   z-index: 10000;

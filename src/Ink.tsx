@@ -74,18 +74,8 @@ class Ink extends React.Component<InkProps, InkState> {
     }
 
     setImage(c : CanvasDraw) : void {
-        let img = "";
-        try {
-            //Annoyingly there's not a good way to get ahold of the picture using the interface.
-            //There are 4 canvases for a CanvasDraw and the 1th one has our drawing in it.
-            //When a PR is resolved on the upstream lib we can replace this with a nicer call.
-            img = document.querySelectorAll("canvas")[1].toDataURL();
-        } catch (ex) {
-            //ignored
-        }
         this.setState({
             undo: () => c.undo(),
-            img
         }, () => this.props.save(c.getSaveData()));
     }
 
@@ -96,8 +86,27 @@ class Ink extends React.Component<InkProps, InkState> {
     }
 
     draw() : void {
-        if (this.state.img && this.state.img.length > 0) {
-            this.props.draw(this.state.img);
+        let img = "";
+        try {
+            //Annoyingly there's not a good way to get ahold of the picture using the interface.
+            //There are 4 canvases for a CanvasDraw and the 1th one has our drawing in it.
+            //When a PR is resolved on the upstream lib we can replace this with a nicer call.
+            const srcCanvas = document.querySelectorAll("canvas")[1];
+            const trgCanvas = document.createElement("canvas");
+            trgCanvas.width = srcCanvas.width;
+            trgCanvas.height = srcCanvas.height;
+            let context = trgCanvas.getContext('2d');
+            if (context !== null) {
+                context.fillStyle = "#FFFFFF";
+                context.fillRect(0, 0, trgCanvas.width, trgCanvas.height);
+                context.drawImage(srcCanvas, 0, 0);
+                img = trgCanvas.toDataURL("image/webp", 1);
+            }
+        } catch (ex) {
+            //ignored
+        }
+        if (img.length > 0) {
+            this.props.draw(img);
         }
     }
 

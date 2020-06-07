@@ -2,13 +2,14 @@ import React from "react";
 import {Book} from "./App";
 import {faEye} from '@fortawesome/free-regular-svg-icons';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faTimes} from "@fortawesome/free-solid-svg-icons";
+import {faTimes, faDownload} from "@fortawesome/free-solid-svg-icons";
 import './PresentList.scss';
 
 interface PresentListProps {
     books: Book[];
     present: (book: Book) => void;
     close: () => void;
+    download: () => void;
 }
 
 class PresentList extends React.Component<PresentListProps, any> {
@@ -33,6 +34,7 @@ class PresentList extends React.Component<PresentListProps, any> {
             </div>
             <div className={"books"}>
                 {books}
+                <div className={"row"}><div className={"spacer"}/><div className={"iconControl info"} onClick={() => this.props.download()}><FontAwesomeIcon icon={faDownload}/></div></div>
             </div>
         </div>;
     }
