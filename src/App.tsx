@@ -242,7 +242,7 @@ class App extends React.Component<IAppProps, IAppState> {
                                 lobby: {
                                     name: responseJson.roomCode,
                                     players: responseJson.players,
-                                    galleries: responseJson.galleries
+                                    galleries: []
                                 },
                                 view: "lobby"
                             })
