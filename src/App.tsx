@@ -207,8 +207,12 @@ class App extends React.Component<IAppProps, IAppState> {
             },
             body: JSON.stringify({id: this.state.jobId, contents: contents})
         }).then(() => {
-            reactLocalStorage.remove(PICTURE_BACKUP_KEY);
-            this.waiting()
+            this.setState({
+                savedPicture: undefined
+            }, () => {
+                reactLocalStorage.remove(PICTURE_BACKUP_KEY);
+                this.waiting()
+            });
         });
     }
 
