@@ -5,6 +5,7 @@
 }
 
 body {
+    background-color: $background !important;
 }
 
 
@@ -14,7 +15,6 @@ body {
     height: calc(var(--vh, 1vh) * 100);
     width: 100vw;
     touch-action: manipulation;
-    background: $background;
     color: $foreground;
     font-family: 'Caveat Brush', cursive;
 }
