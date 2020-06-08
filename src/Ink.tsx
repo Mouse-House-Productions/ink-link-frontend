@@ -1,4 +1,4 @@
-import React, {CSSProperties} from "react";
+import React, {CSSProperties, MouseEventHandler} from "react";
 import "./Ink.scss"
 import CanvasDraw, {CanvasDrawProps} from "react-canvas-draw";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -7,6 +7,7 @@ import {cssString, hsl, HSL} from "./HSL";
 import Palette from "./Palette";
 import Thickness from "./Thickness";
 import KeyboardEventHandler from 'react-keyboard-event-handler';
+import InfoPopup from "./InfoPopup";
 
 interface InkState {
     canvasProps : CanvasDrawProps;
@@ -14,6 +15,7 @@ interface InkState {
     undo?: (() => void) | null;
     paletteActive: "closed" | "opened" | "hidden";
     thicknessActive: "closed" | "opened" | "hidden";
+    promptActive: "closed" | "opened" | "hidden";
     img?: string;
     undoEnabled?: boolean;
 }
@@ -50,7 +52,8 @@ class Ink extends React.Component<InkProps, InkState> {
                 }
             },
             paletteActive: "hidden",
-            thicknessActive: "hidden"
+            thicknessActive: "hidden",
+            promptActive: "hidden"
         }
     }
 
@@ -110,6 +113,14 @@ class Ink extends React.Component<InkProps, InkState> {
         }
     }
 
+    openPrompt : MouseEventHandler<HTMLDivElement> = e => {
+        if (e.currentTarget.scrollWidth > e.currentTarget.offsetWidth) {
+            this.setState({
+                promptActive: "opened"
+            });
+        }
+    }
+
     public render() {
         let brushHsl = this.state.brushColor;
         const canvasProps : CanvasDrawProps = {
@@ -128,12 +139,16 @@ class Ink extends React.Component<InkProps, InkState> {
         }
         const brushClass = brushHsl.light <= 50 ? "light" : "dark";
         // @ts-ignore
+        const prompt = this.props.prompt ? this.props.prompt : "";
         return (
             <div>
                 <Palette active={this.state.paletteActive} select={(c) => this.setBrushColor(c)} cancel={() => this.setState({paletteActive: "closed"})}/>
                 <Thickness active={this.state.thicknessActive} select={(c) => this.setBrushRadius(c)} cancel={() => this.setState({thicknessActive: "closed"})}/>
+                <InfoPopup active={this.state.promptActive} close={() => this.setState({promptActive: 'closed'})}>
+                    <h4>{prompt}</h4>
+                </InfoPopup>
                 <div className={"Ink"}>
-                    <div className={"title"}>{this.props.prompt ? this.props.prompt : ""}</div>
+                    <div className={"title flowable"} onClick={e => this.openPrompt(e)}>{prompt}</div>
                     <CanvasDraw {...canvasProps}/>
                     <div className={"controlBar centered"}>
                         <div className={"iconControl x-lg"} style={paletteStyle} onClick={() => this.setState({paletteActive: "opened"})}>
