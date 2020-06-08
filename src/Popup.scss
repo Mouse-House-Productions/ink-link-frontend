@@ -12,6 +12,7 @@
   top: 0;
   left: 0;
   justify-content: center;
+  align-items: center;
   overflow: hidden;
 }
 
@@ -57,6 +58,7 @@
   @media (max-device-width: 1000px) {
     width: 90vw;
   }
+  max-height: 90vh;
 
   > *:not(.wide) {
     margin: 0.5rem;

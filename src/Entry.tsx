@@ -81,7 +81,7 @@ class Entry extends React.Component<EntryFormProps, EntryFormState> {
 
     public render() {
         return (
-            <div className={"Entry"}>
+            <div>
                 <InfoPopup active={this.state.infoPopup} close={() => this.closeInfoPopup()}>
                     <div className={"row wide"}>
                         <h1>About</h1>
@@ -129,17 +129,19 @@ class Entry extends React.Component<EntryFormProps, EntryFormState> {
                     <span>Nominate one player to push the buttons. The gallery will show up on everyone's devices at the same time.</span>
                     <span>Press <div className={"iconControl inline"}><FontAwesomeIcon icon={faEye}/></div> to open the chain, use <div className={"iconControl inline"}><FontAwesomeIcon icon={faArrowLeft}/></div> and <div className={"iconControl inline"}><FontAwesomeIcon icon={faArrowRight}/></div> to step through the submissions.</span>
                 </InfoPopup>
-                <div className={"row center"}><div className={"title rainbow large"}>Ink Link</div></div>
-                <input className={"entryInput"} type={"text"} defaultValue={this.state.name} placeholder={"Name"} onChange={e => this.setName(e)} onKeyDown={e => this.handleKeyPress(e)}/>
-                <input className={"entryInput"} type={"text"} defaultValue={this.state.roomCode} placeholder={"Room Code"} onChange={e => this.setRoomCode(e)} onKeyDown={e => this.handleKeyPress(e)}/>
-                <div className={"controlBar"}>
-                    <div onClick={() => this.openInfoPopup()} className={"iconControl info x-lg"}><FontAwesomeIcon icon={faInfo}/></div>
-                    <div onClick={() => this.openHowToPopup()} className={"iconControl info x-lg"}><FontAwesomeIcon icon={faQuestion}/></div>
+                <div className={"Entry"}>
+                    <div className={"row center"}><div className={"title rainbow large"}>Ink Link</div></div>
+                    <input className={"entryInput"} type={"text"} defaultValue={this.state.name} placeholder={"Name"} onChange={e => this.setName(e)} onKeyDown={e => this.handleKeyPress(e)}/>
+                    <input className={"entryInput"} type={"text"} defaultValue={this.state.roomCode} placeholder={"Room Code"} onChange={e => this.setRoomCode(e)} onKeyDown={e => this.handleKeyPress(e)}/>
+                    <div className={"controlBar"}>
+                        <div onClick={() => this.openInfoPopup()} className={"iconControl info x-lg"}><FontAwesomeIcon icon={faInfo}/></div>
+                        <div onClick={() => this.openHowToPopup()} className={"iconControl info x-lg"}><FontAwesomeIcon icon={faQuestion}/></div>
+                        <div className={"spacer"}/>
+                        <div onClick={() => this.submit()} className={"iconControl success x-lg"}><FontAwesomeIcon icon={faArrowRight}/></div>
+                    </div>
                     <div className={"spacer"}/>
-                    <div onClick={() => this.submit()} className={"iconControl success x-lg"}><FontAwesomeIcon icon={faArrowRight}/></div>
+                    <div className={"logo"}/>
                 </div>
-                <div className={"spacer"}/>
-                <div className={"logo"}/>
             </div>)
     }
 }
