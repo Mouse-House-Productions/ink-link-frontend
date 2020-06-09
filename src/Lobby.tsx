@@ -24,6 +24,7 @@ export interface LobbyProps {
     room: Room;
     submit: (() => void);
     download: (galleryId: string) => void;
+    leave: () => void;
 }
 
 class Lobby extends React.Component<LobbyProps, LobbyState> {
@@ -87,7 +88,7 @@ class Lobby extends React.Component<LobbyProps, LobbyState> {
                 </div>
                 {rounds}
             </InfoPopup>
-            <div className={"row"}><div className={"title rainbow"}>Lobby {this.props.room.name}</div><div className={"spacer"}/><div className={"iconControl danger"}><FontAwesomeIcon icon={faTimes}/></div></div>
+            <div className={"row"}><div className={"title rainbow"}>Lobby {this.props.room.name}</div><div className={"spacer"}/><div className={"iconControl danger"} onClick={() => this.props.leave()}><FontAwesomeIcon icon={faTimes}/></div></div>
             <div className={"list"}>
                 {players}
             </div>

@@ -87,6 +87,14 @@ class App extends React.Component<IAppProps, IAppState> {
     }
 
     refreshState() {
+        if (this.state.playerId) {
+            fetch(API_URL + 'checkin', {
+                method: "POST",
+                headers: {
+                    "X-InkLink-UserId": this.state.playerId
+                }
+            }).then(r => {});
+        }
         switch(this.state.view) {
             case "lobby":
                 this.fetchLobby();
@@ -214,6 +222,23 @@ class App extends React.Component<IAppProps, IAppState> {
                 this.waiting()
             });
         });
+    }
+
+    leaveRoom() : void {
+        const playerId = this.state.playerId;
+        this.setState({
+            view: "init",
+            roomId: undefined,
+            playerId: undefined,
+            jobId: undefined,
+            savedPicture: undefined,
+            savedPlayerId: undefined,
+            savedRoomId: undefined,
+            savedRoomName: undefined
+        }, () => fetch(API_URL + 'leave', {
+            method: "POST",
+            body: JSON.stringify({playerId})
+        }))
     }
 
     enterRoom(playerName: string, joinCode: string) : void {
@@ -352,7 +377,7 @@ class App extends React.Component<IAppProps, IAppState> {
             case "waiting":
                 return <Waiting/>
             case "lobby":
-                return <Lobby room={this.state.lobby} submit={() => this.startGame()} download={id => this.downloadGallery(id)}/>
+                return <Lobby room={this.state.lobby} submit={() => this.startGame()} download={id => this.downloadGallery(id)} leave={() => this.leaveRoom()}/>
             case "present":
                 return <Present book={this.state.book} close={() => this.closePresent()} progress={this.state.progress} updateProgress={p => this.updateGallery(this.state.galleryId, undefined, p)}/>
             case "ink":
