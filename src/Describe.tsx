@@ -24,7 +24,9 @@ class Describe extends React.Component<DescribeProps, DescribeState> {
     describe() {
         const description = this.state.description;
         if (description && description.length > 0) {
-            this.props.describe(description);
+            this.setState({
+                description: ''
+            }, () => this.props.describe(description));
         }
     }
 
