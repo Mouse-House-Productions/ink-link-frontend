@@ -140,7 +140,11 @@ class Entry extends React.Component<EntryFormProps, EntryFormState> {
                         <div onClick={() => this.submit()} className={"iconControl success x-lg"}><FontAwesomeIcon icon={faArrowRight}/></div>
                     </div>
                     <div className={"spacer"}/>
-                    <div className={"logo"}/>
+                    <div className={"row center"}>
+                        <a href={"https://www.twitter.com/MouseHouseDev"}>
+                            <div className={"logo"}/>
+                        </a>
+                    </div>
                 </div>
             </div>)
     }
