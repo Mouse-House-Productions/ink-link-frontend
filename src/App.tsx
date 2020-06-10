@@ -77,13 +77,19 @@ class App extends React.Component<IAppProps, IAppState> {
                 pages: []
             },
             progress: 0,
-            popup: (savedPlayerId && savedRoomId) ? "opened" : "hidden",
+            popup: "hidden",
             savedPlayerId,
             savedRoomId,
             savedPicture,
             savedRoomName
         }
         window.setInterval(() => this.refreshState(), 1000)
+    }
+
+    componentDidMount() {
+        if (this.state.savedRoomId) {
+            this.checkLobby();
+        }
     }
 
     refreshState() {
@@ -126,6 +132,31 @@ class App extends React.Component<IAppProps, IAppState> {
                 }
             })
         }));
+    }
+
+    private checkLobby() {
+        fetch(API_URL + 'room?id=' + this.state.savedRoomId, {
+            method: "GET"
+        }).then(resp => {
+            if (resp.ok) {
+                this.setState({
+                    popup: "opened"
+                })
+            } else {
+                this.setState({
+                        savedPicture: undefined,
+                        savedRoomName: undefined,
+                        savedRoomId: undefined,
+                        savedPlayerId: undefined
+                    }, () => {
+                        localStorage.removeItem(PICTURE_BACKUP_KEY);
+                        localStorage.removeItem(PLAYER_ID_LOCAL_KEY);
+                        localStorage.removeItem(ROOM_ID_LOCAL_KEY);
+                        localStorage.removeItem(ROOM_NAME_LOCAL_KEY);
+                    }
+                )
+            }
+        })
     }
 
     private gallery() {
@@ -335,7 +366,11 @@ class App extends React.Component<IAppProps, IAppState> {
                     name: prevState.savedRoomName ? prevState.savedRoomName : '',
                     galleries: [],
                     players: []
-                }
+                },
+                savedPlayerId: undefined,
+                savedRoomId: undefined,
+                savedRoomName: undefined,
+                savedPicture: undefined,
             }
         });
     }
