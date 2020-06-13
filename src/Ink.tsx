@@ -113,13 +113,7 @@ class Ink extends React.Component<InkProps, InkState> {
         }
     }
 
-    openPrompt : MouseEventHandler<HTMLDivElement> = e => {
-        if (e.currentTarget.scrollWidth > e.currentTarget.offsetWidth) {
-            this.setState({
-                promptActive: "opened"
-            });
-        }
-    }
+    openPrompt : MouseEventHandler<HTMLDivElement> = e => { this.setState({promptActive: "opened"}); }
 
     public render() {
         let brushHsl = this.state.brushColor;
