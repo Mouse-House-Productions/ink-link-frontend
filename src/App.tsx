@@ -416,9 +416,9 @@ class App extends React.Component<IAppProps, IAppState> {
             case "present":
                 return <Present book={this.state.book} close={() => this.closePresent()} progress={this.state.progress} updateProgress={p => this.updateGallery(this.state.galleryId, undefined, p)}/>
             case "ink":
-                return <Ink prompt={this.state.description} draw={img => this.completeJob(img)} save={img => this.saveDrawing(img)} saved={this.state.savedPicture}/>
+                return <Ink key={"ink" + this.state.jobId} prompt={this.state.description} draw={img => this.completeJob(img)} save={img => this.saveDrawing(img)} saved={this.state.savedPicture}/>
             case "describe":
-                return <Describe describe={d => this.completeJob(d)} img={this.state.img}/>
+                return <Describe key={"describe" + this.state.jobId} describe={d => this.completeJob(d)} img={this.state.img}/>
             case "gallery":
                 return <PresentList books={this.state.books} present={book => this.present(book)} close={() => this.closeGallery()} download={() => this.downloadGallery()}/>
         }
