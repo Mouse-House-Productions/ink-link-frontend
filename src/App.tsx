@@ -356,21 +356,41 @@ class App extends React.Component<IAppProps, IAppState> {
     }
 
     acceptRejoin() {
-        this.setState(prevState => {
-            return {
-                view: "lobby",
-                popup: "closed",
-                roomId: prevState.savedRoomId,
-                playerId: prevState.savedPlayerId,
-                lobby: {
-                    name: prevState.savedRoomName ? prevState.savedRoomName : '',
-                    galleries: [],
-                    players: []
-                },
-                savedPlayerId: undefined,
-                savedRoomId: undefined,
-                savedRoomName: undefined,
-                savedPicture: undefined,
+        fetch(API_URL + 'room?id=' + this.state.savedRoomId, {
+            method: "GET"
+        }).then(resp => {
+            if (resp.ok) {
+                this.setState(prevState => {
+                    return {
+                        view: "lobby",
+                        popup: "closed",
+                        roomId: prevState.savedRoomId,
+                        playerId: prevState.savedPlayerId,
+                        lobby: {
+                            name: prevState.savedRoomName ? prevState.savedRoomName : '',
+                            galleries: [],
+                            players: []
+                        },
+                        savedPlayerId: undefined,
+                        savedRoomId: undefined,
+                        savedRoomName: undefined,
+                        savedPicture: undefined,
+                    }
+                })
+            } else {
+                this.setState({
+                        savedPicture: undefined,
+                        savedRoomName: undefined,
+                        savedRoomId: undefined,
+                        savedPlayerId: undefined,
+                        popup: "closed"
+                    }, () => {
+                        localStorage.removeItem(PICTURE_BACKUP_KEY);
+                        localStorage.removeItem(PLAYER_ID_LOCAL_KEY);
+                        localStorage.removeItem(ROOM_ID_LOCAL_KEY);
+                        localStorage.removeItem(ROOM_NAME_LOCAL_KEY);
+                    }
+                )
             }
         });
     }
