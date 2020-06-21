@@ -56,7 +56,7 @@ class Lobby extends React.Component<LobbyProps, LobbyState> {
         const rounds : JSX.Element[] = [];
         for (let i = 0; i < this.props.room.galleries.length; i++) {
             rounds.push(
-                <div className={"row wide"}>
+                <div key={'round_button_'+i} className={"row wide"}>
                     <h4>Round {i + 1}</h4>
                     <div className={"spacer"}/>
                     <div className={"iconControl info"} onClick={() => this.props.download(this.props.room.galleries[i])}><FontAwesomeIcon icon={faDownload}/></div>
@@ -68,11 +68,11 @@ class Lobby extends React.Component<LobbyProps, LobbyState> {
 
         if (this.props.room.galleries.length > 0) {
 
-            buttons.push(<div className={"iconControl info lg"} onClick={() => this.openPrevGamesPopup()}>
+            buttons.push(<div key={'show_prev_games'} className={"iconControl info lg"} onClick={() => this.openPrevGamesPopup()}>
                 <FontAwesomeIcon icon={faImages}/>
             </div>)
         }
-        buttons.push(<div className={"iconControl success lg"} onClick={() => this.props.submit()}>
+        buttons.push(<div key={'start_game'} className={"iconControl success lg"} onClick={() => this.props.submit()}>
             <FontAwesomeIcon icon={faArrowRight}/>
         </div>)
 

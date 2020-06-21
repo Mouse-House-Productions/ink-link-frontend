@@ -327,7 +327,7 @@ class App extends React.Component<IAppProps, IAppState> {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({roomId: this.state.roomId})
+            body: JSON.stringify({roomId: this.state.roomId, galleryId: this.state.galleryId})
         }).then(() => this.fetchLobby()).catch(reason => {
             console.log(reason);
         });

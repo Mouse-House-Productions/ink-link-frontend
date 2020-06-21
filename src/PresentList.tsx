@@ -19,7 +19,7 @@ class PresentList extends React.Component<PresentListProps, any> {
     }
 
     private renderBook(book: Book) : JSX.Element {
-        return <div className={"row"}><span>{book.author}</span><div className={"spacer"}/><div className={"iconControl"} onClick={() => this.present(book)}><FontAwesomeIcon icon={faEye}/></div></div>
+        return <div key={book.id} className={"row"}><span>{book.author}</span><div className={"spacer"}/><div className={"iconControl"} onClick={() => this.present(book)}><FontAwesomeIcon icon={faEye}/></div></div>
     }
 
     render() {

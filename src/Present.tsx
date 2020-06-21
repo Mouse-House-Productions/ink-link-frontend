@@ -18,7 +18,7 @@ class Present extends React.Component<PresentProps> {
          case "description":
             return (<div key={entry.contents+entry.author} className={"presentCaption"}>{entry.author + ": \"" + entry.contents + "\""}</div>);
          case "depiction":
-            return (<div className={"presentImage"}><img key={entry.contents} src={entry.contents} alt={"Depiction"}/><h5>by {entry.author}</h5></div>)
+            return (<div key={entry.contents+entry.author} className={"presentImage"}><img src={entry.contents} alt={"Depiction"}/><h5>by {entry.author}</h5></div>)
       }
    }
 
