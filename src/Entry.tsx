@@ -104,7 +104,7 @@ class Entry extends React.Component<EntryFormProps, EntryFormState> {
                     <h4>Backend Stack:</h4>
                     <ul>
                         <li>Server written on top of <a href={"https://github.com/expressjs/express"}>express</a>.</li>
-                        <li>Database provided by <a href={"https://supabase.io/"}>supabase</a>.</li>
+                        <li>Database and server provided by <a href={"https://aws.amazon.com/"}>AWS</a>.</li>
                         <li>Database client written with <a href={"https://node-postgres.com/"}>node-postgres</a>.</li>
                     </ul>
                 </InfoPopup>
