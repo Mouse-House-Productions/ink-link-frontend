@@ -91,6 +91,9 @@ class Entry extends React.Component<EntryFormProps, EntryFormState> {
                         </div>
                     </div>
                     <span>Ink Link is the first game from <a href={"https://twitter.com/MouseHouseDev"}>Mouse House</a>, a team of mouse spouses making internet games. If you're looking for how to play, close this popup and hit <div className={"iconControl info inline"}><FontAwesomeIcon icon={faQuestion}/></div>.</span>
+                    <h3>Feedback/Bugs</h3>
+                    <span>We'd love to hear what you think about the game or if you find any issues. You can tweet us <a href={"https://twitter.com/MouseHouseDev"}>@MouseHouseDev</a>.</span>
+                    <h3>Technology</h3>
                     <span>This was developed with a mobile browser focus over the course of a few long weekends. We leveraged a bunch of great existing technologies which allowed us to build this in a relatively short timespan.</span>
                     <h4>Frontend Stack:</h4>
                     <ul>
