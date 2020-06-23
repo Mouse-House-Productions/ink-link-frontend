@@ -293,7 +293,7 @@ class App extends React.Component<IAppProps, IAppState> {
                 reactLocalStorage.set(ROOM_ID_LOCAL_KEY, responseJson.id);
                 reactLocalStorage.set(ROOM_NAME_LOCAL_KEY, responseJson.roomCode);
                 this.setState({
-                    playerId: responseJson.id,
+                    playerId: responseJson.playerId,
                     roomId: responseJson.id,
                     lobby: {
                         name: responseJson.roomCode,
