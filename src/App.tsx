@@ -44,6 +44,7 @@ interface IAppState {
     savedRoomId?: string;
     savedRoomName?: string;
     savedPicture?: string;
+    enterRoomLocked: boolean;
 }
 
 const API_URL = process.env.REACT_APP_API_URL;
@@ -81,7 +82,8 @@ class App extends React.Component<IAppProps, IAppState> {
             savedPlayerId,
             savedRoomId,
             savedPicture,
-            savedRoomName
+            savedRoomName,
+            enterRoomLocked: false
         }
         window.setInterval(() => this.refreshState(), 1000)
     }
@@ -272,49 +274,36 @@ class App extends React.Component<IAppProps, IAppState> {
         }))
     }
 
+
     enterRoom(playerName: string, joinCode: string) : void {
-        //TODO: Tidy up this mess of promises
-        fetch(API_URL + 'player', {
+        if (this.state.enterRoomLocked) {
+            return;
+        }
+        this.setState({enterRoomLocked: true});
+        fetch(API_URL + 'join', {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({playerName})
-        }).then(resp => {
-            resp.json().then(responseJson => {
+            body: JSON.stringify({playerName, joinCode})
+        }).then(resp => resp.json())
+            .then(responseJson => {
                 reactLocalStorage.set(PLAYER_ID_LOCAL_KEY, responseJson.id);
                 reactLocalStorage.remove(PICTURE_BACKUP_KEY); //We're a new player so make sure we throw away any backed up drawings
+                reactLocalStorage.set(ROOM_ID_LOCAL_KEY, responseJson.id);
+                reactLocalStorage.set(ROOM_NAME_LOCAL_KEY, responseJson.roomCode);
                 this.setState({
-                    playerId: responseJson.id
-                }, () => {
-                    fetch(API_URL + 'join', {
-                        method: "POST",
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({joinCode, playerId: this.state.playerId})
-                    }).then(resp => {
-                        resp.json().then(responseJson => {
-                            reactLocalStorage.set(ROOM_ID_LOCAL_KEY, responseJson.id);
-                            reactLocalStorage.set(ROOM_NAME_LOCAL_KEY, responseJson.roomCode);
-                            this.setState({
-                                roomId: responseJson.id,
-                                lobby: {
-                                    name: responseJson.roomCode,
-                                    players: responseJson.players,
-                                    galleries: []
-                                },
-                                view: "lobby"
-                            })
-                        })
-                    }).catch(reason => {
-                        console.log(reason);
-                    });
+                    playerId: responseJson.id,
+                    roomId: responseJson.id,
+                    lobby: {
+                        name: responseJson.roomCode,
+                        players: responseJson.players,
+                        galleries: []
+                    },
+                    view: "lobby"
                 })
-            }).catch(reason => {
-                console.log(reason);
             })
-        });
+            .finally(() => this.setState({ enterRoomLocked: false }));
     }
 
     closePresent() {
