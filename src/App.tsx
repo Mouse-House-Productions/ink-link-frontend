@@ -288,10 +288,6 @@ class App extends React.Component<IAppProps, IAppState> {
             body: JSON.stringify({playerName, joinCode})
         }).then(resp => resp.json())
             .then(responseJson => {
-                reactLocalStorage.set(PLAYER_ID_LOCAL_KEY, responseJson.id);
-                reactLocalStorage.remove(PICTURE_BACKUP_KEY); //We're a new player so make sure we throw away any backed up drawings
-                reactLocalStorage.set(ROOM_ID_LOCAL_KEY, responseJson.id);
-                reactLocalStorage.set(ROOM_NAME_LOCAL_KEY, responseJson.roomCode);
                 this.setState({
                     playerId: responseJson.playerId,
                     roomId: responseJson.id,
@@ -301,6 +297,11 @@ class App extends React.Component<IAppProps, IAppState> {
                         galleries: []
                     },
                     view: "lobby"
+                }, () => {
+                    reactLocalStorage.set(PLAYER_ID_LOCAL_KEY, this.state.playerId);
+                    reactLocalStorage.remove(PICTURE_BACKUP_KEY); //We're a new player so make sure we throw away any backed up drawings
+                    reactLocalStorage.set(ROOM_ID_LOCAL_KEY, this.state.roomId);
+                    reactLocalStorage.set(ROOM_NAME_LOCAL_KEY, this.state.lobby.name);
                 })
             })
             .finally(() => this.setState({ enterRoomLocked: false }));
