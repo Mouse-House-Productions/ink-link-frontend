@@ -1,7 +1,22 @@
-# Whispustration
+# Ink Link Frontend
 
-The name is dumb but I didn't let that hold me back!
+This is the frontend for [Ink Link](https://inklink.xyz).
 
+What is Ink Link?
+---
+Ink Link is the first game from [Mouse House](https://twitter.com/mousehousedev), a team of mouse spouses making internet games.
+It is a collaborative game of depiction and description.
+Players take turns to describe or draw the last player's submission and at the end you can review the chains to see what comedic misinterpretation have been made along the way.
+
+How do I deploy this?
+---
+You'll need an instance of the [backend](https://github.com/Mouse-House-Productions/ink-link-backend) somewhere and you'll need to set the `REACT_APP_API_URL` to where that's deployed either by environment variable or editing the `.env.production` file.
+
+Once you've got the backend url set you need to buid and host the frontend. I use [Netlify](https://app.netlify.com) but broadly speaking you need to run `npm run build` and host the static content somewhere.
+
+
+Create React App
+---
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
